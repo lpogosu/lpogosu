@@ -1,0 +1,21 @@
+# Переводы строк фиксируются здесь, а не в настройках каждой машины.
+# Клон на Windows иначе перепишет файлы в CRLF, и yamllint, gofmt или prettier
+# упадут на содержимом, которого никто не менял.
+* text=auto eol=lf
+
+# Исключение: батники Windows без CRLF не запускаются.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Бинарные: не сравниваются построчно и не трогаются конвертацией.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.bz2 binary
+*.woff binary
+*.woff2 binary

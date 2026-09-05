@@ -1,0 +1,70 @@
+# Профиль пересобирается из состояния аккаунта, а не поддерживается вручную.
+#
+# Сам по себе автоматический README — мелочь. Ценность в трёх ошибках, которые
+# он делает невозможными: ссылка на репозиторий, ставший приватным; забытый
+# новый проект; описание, разошедшееся с карточкой репозитория.
+name: profile
+
+on:
+  schedule:
+    # Раз в сутки: состав репозиториев меняется реже, чем раз в час, и незачем
+    # будить раннер ради диффа, которого нет.
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - profile.yml
+      - scripts/render_profile.py
+      - .github/workflows/profile.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile
+  cancel-in-progress: false
+
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.11"
+
+      - run: python -m pip install --requirement requirements.txt
+
+      - name: Проверки
+        run: |
+          python -m ruff check .
+          python -m mypy
+          python -m pytest -q
+
+      - name: Пересобрать блок репозиториев
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/render_profile.py
+
+      - name: Проверить, что все ссылки открываются
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/check_links.py
+
+      - name: Закоммитить, если что-то изменилось
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- README.md; then
+            echo "изменений нет"
+            exit 0
+          fi
+          # Автор задан явно: коммит от github-actions[bot] сломал бы единство
+          # авторства в истории и не попал бы в граф вкладов.
+          git config user.name "lpogosu"
+          git config user.email "115780379+lpogosu@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs(profile): обновить список репозиториев"
+          git push

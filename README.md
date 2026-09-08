@@ -52,6 +52,7 @@
 | Репозиторий | О чём |
 |---|---|
 | [genesis-provider](https://github.com/lpogosu/genesis-provider) | Генератор интеграций с платёжными провайдерами: OpenAPI на входе, готовый Ruby-клиент, вебхуки и отчёт о покрытии на выходе |
+| [insurance-sim](https://github.com/lpogosu/insurance-sim) | Симулятор управления личными рисками: полгода, шесть полисов и бюджет, которого на всё не хватает. Next.js, чистый движок с воспроизводимым seed, Telegram Mini App и бот |
 
 <!-- repos:end -->
 

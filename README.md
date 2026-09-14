@@ -53,6 +53,7 @@
 |---|---|
 | [genesis-provider](https://github.com/lpogosu/genesis-provider) | Генератор интеграций с платёжными провайдерами: OpenAPI на входе, готовый Ruby-клиент, вебхуки и отчёт о покрытии на выходе |
 | [insurance-sim](https://github.com/lpogosu/insurance-sim) | Симулятор управления личными рисками: полгода, шесть полисов и бюджет, которого на всё не хватает. Next.js, чистый движок с воспроизводимым seed, Telegram Mini App и бот |
+| [orbita-constellation](https://github.com/lpogosu/orbita-constellation) | Расчёт устойчивости спутниковой группировки: временной граф связи на сутках, разбор отказов и сравнение конфигураций. Ядро на NumPy, FastAPI и очередь расчётов, интерфейс на React с 3D-глобусом, спроектированный в Figma |
 
 <!-- repos:end -->
 
